@@ -14,7 +14,7 @@ public:
         
 //     }
     
-// TOP DOWN DP 
+//     TOP DOWN DP 
 //     int topDown(int n, vector<int> &dp){
 //         if(n<=1){
 //             return n;
@@ -34,18 +34,33 @@ public:
 //         return topDown(n, dp);
 //     }
     
-    // BOTTOM UP DP 
+//     BOTTOM UP DP 
+//     int fib(int n) {
+//         vector<int> dp(n+1);
+//         if(n<=1){
+//             return n;
+//         }
+//         dp[0]=0;
+//         dp[1]=1;
+//         for(int i=2; i<=n; i++){
+//             dp[i]=dp[i-1]+dp[i-2];
+//         }
+//         return dp[n];
+//     }
     
+    // SPACE OPTIMIZATION
     int fib(int n) {
-        vector<int> dp(n+1);
         if(n<=1){
             return n;
         }
-        dp[0]=0;
-        dp[1]=1;
+        int p1 = 1;
+        int p2 = 0;
+        int curr;
         for(int i=2; i<=n; i++){
-            dp[i]=dp[i-1]+dp[i-2];
+            curr = p1 + p2;
+            p2 = p1;
+            p1 = curr;
         }
-        return dp[n];
+        return curr;
     }
 };
