@@ -1,47 +1,93 @@
+// SPACE OPTIMIZATION
+
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
         int cnt = 0;
         int n = coins.size();
-        vector<vector<int>> dp(n, vector<int>(amount+1, INT_MAX));
+        vector<int> prev(amount+1, INT_MAX);
+        vector<int> curr(amount+1, INT_MAX);
         if(coins[0]<=amount)
-            dp[0][coins[0]] = 0;
-        for(int i=0; i<n; i++){
-            dp[i][0] = 0;
-        }
+            prev[coins[0]] = 0;
+        prev[0] = curr[0] = 0;
         for(int i=1; i<=amount; i++){
             int t1 = INT_MAX;
             if(i>=coins[0]){
-                t1 = dp[0][i-coins[0]];
+                t1 = prev[i-coins[0]];
                 if(t1!=INT_MAX) t1+=1;
             }
-            dp[0][i] = t1;
+            prev[i] = t1;
         }
         for(int i=1; i<n; i++){
             for(int j=1; j<=amount; j++){
-                int nt = dp[i-1][j];
+                int nt = prev[j];
                 int t1 = INT_MAX;
                 int t2 = INT_MAX;
                 if(j>=coins[i]){
-                    t1 = dp[i][j-coins[i]];
+                    t1 = curr[j-coins[i]];
                     if(t1!=INT_MAX) t1+=1;
                 } 
                 if(j>=coins[i]){
-                    t2 = dp[i-1][j-coins[i]];
+                    t2 = prev[j-coins[i]];
                     if(t2!=INT_MAX) t2+=1;
                 }
-                dp[i][j] = min(nt, min(t1,t2));
+                curr[j] = min(nt, min(t1,t2));
             }
+            prev = curr;
         }
-        int ans = dp[n-1][amount];
+        int ans = prev[amount];
         if(ans==INT_MAX) return -1;
         return ans;
     }
 };
 
 
+// TABULATION
+
+// class Solution {
+// public:
+//     int coinChange(vector<int>& coins, int amount) {
+//         int cnt = 0;
+//         int n = coins.size();
+//         vector<vector<int>> dp(n, vector<int>(amount+1, INT_MAX));
+//         if(coins[0]<=amount)
+//             dp[0][coins[0]] = 0;
+//         for(int i=0; i<n; i++){
+//             dp[i][0] = 0;
+//         }
+//         for(int i=1; i<=amount; i++){
+//             int t1 = INT_MAX;
+//             if(i>=coins[0]){
+//                 t1 = dp[0][i-coins[0]];
+//                 if(t1!=INT_MAX) t1+=1;
+//             }
+//             dp[0][i] = t1;
+//         }
+//         for(int i=1; i<n; i++){
+//             for(int j=1; j<=amount; j++){
+//                 int nt = dp[i-1][j];
+//                 int t1 = INT_MAX;
+//                 int t2 = INT_MAX;
+//                 if(j>=coins[i]){
+//                     t1 = dp[i][j-coins[i]];
+//                     if(t1!=INT_MAX) t1+=1;
+//                 } 
+//                 if(j>=coins[i]){
+//                     t2 = dp[i-1][j-coins[i]];
+//                     if(t2!=INT_MAX) t2+=1;
+//                 }
+//                 dp[i][j] = min(nt, min(t1,t2));
+//             }
+//         }
+//         int ans = dp[n-1][amount];
+//         if(ans==INT_MAX) return -1;
+//         return ans;
+//     }
+// };
+
 
 // MEMOIZATION
+
 // class Solution {
 // public:
 //     int f(vector<int>& coins, int i, int amt, int cnt, vector<vector<int>> &dp){
@@ -76,6 +122,7 @@ public:
 
 
 // RECURSION
+
 // class Solution {
 // public:
 //     int f(vector<int>& coins, int i, int amt, int cnt){
